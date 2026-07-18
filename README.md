@@ -108,7 +108,8 @@ Tested with Claude Code and Claude Desktop.
 git clone https://github.com/manganate006/mailu-mcp
 cd mailu-mcp && npm install
 npm run build && npm run bundle    # dist/bundle.js (single file, e.g. for NFS)
-npm test                           # CRUD self-test (needs live MAILU_API_URL/TOKEN)
+npm test                           # unit tests (mocked HTTP, no live server)
+npm run test:integration           # end-to-end CRUD self-test (needs live MAILU_API_URL/TOKEN)
 npx @modelcontextprotocol/inspector node dist/bundle.js
 ```
 
