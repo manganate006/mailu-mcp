@@ -1,12 +1,15 @@
 name: Publish to npm
 
 # Publie sur npm via Trusted Publishing (OIDC) — aucun token stocke.
-# Prerequis (une fois) : configurer le Trusted Publisher sur npmjs.com
+# Autonome : tout push sur main dont la version n'est pas encore publiee declenche
+# la publication (garde-fou anti-doublon). Marche aussi via Release ou lancement manuel.
+# Prerequis (une fois) : Trusted Publisher configure sur npmjs.com
 #   package @manganate06/mailu-mcp -> Settings -> Trusted Publisher -> GitHub Actions
 #   Repository: manganate006/mailu-mcp  |  Workflow: publish.yml
-# Declenchement : creer une Release GitHub (ou lancer manuellement).
 
 on:
+  push:
+    branches: [main]
   release:
     types: [published]
   workflow_dispatch:
@@ -26,5 +29,18 @@ jobs:
       - name: Update npm (OIDC trusted publishing requires npm >= 11.5.1)
         run: npm install -g npm@latest
       - run: npm install
+      - name: Check if this version is already published
+        id: check
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if npm view "@manganate06/mailu-mcp@$VERSION" version >/dev/null 2>&1; then
+            echo "Deja publie: $VERSION — rien a faire."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nouvelle version: $VERSION — publication."
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish (auth via OIDC, provenance automatique)
+        if: steps.check.outputs.publish == 'true'
         run: npm publish --access public
