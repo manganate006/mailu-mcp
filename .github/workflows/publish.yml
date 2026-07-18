@@ -25,9 +25,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          # PAS de registry-url : il injecterait un NODE_AUTH_TOKEN factice dans
-          # .npmrc et npm tenterait ce token au lieu de l'OIDC. Sans lui, npm
-          # publie via OIDC (Trusted Publishing) sur le registre par defaut.
+          registry-url: https://registry.npmjs.org   # requis pour cadrer l'echange OIDC
       - name: Ensure npm supports OIDC trusted publishing (>= 11.5.1)
         # npm@latest est passe en v12 (exige Node >= 24.15) ; on epingle npm@11,
         # compatible Node 24 et suffisant pour l'OIDC.
