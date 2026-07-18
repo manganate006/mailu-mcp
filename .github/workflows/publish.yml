@@ -1,6 +1,6 @@
 name: Publish to npm
 
-# Publie sur npm via Trusted Publishing (OIDC) — aucun token stocke.
+# Publie sur npm via Trusted Publishing (OIDC) — aucun token stocke, auth par OIDC.
 # Autonome : tout push sur main dont la version n'est pas encore publiee declenche
 # la publication (garde-fou anti-doublon). Marche aussi via Release ou lancement manuel.
 # Prerequis (une fois) : Trusted Publisher configure sur npmjs.com
