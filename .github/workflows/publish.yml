@@ -34,7 +34,10 @@ jobs:
         run: |
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          if npm view "@manganate06/mailu-mcp@$VERSION" version >/dev/null 2>&1; then
+          # npm view pkg@version sort en exit 0 (vide) si la version n'existe pas :
+          # comparer la SORTIE, pas le code retour.
+          PUBLISHED=$(npm view "@manganate06/mailu-mcp@$VERSION" version 2>/dev/null || true)
+          if [ "$PUBLISHED" = "$VERSION" ]; then
             echo "Deja publie: $VERSION — rien a faire."
             echo "publish=false" >> "$GITHUB_OUTPUT"
           else
