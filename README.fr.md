@@ -8,7 +8,7 @@
 [![npm](https://img.shields.io/npm/v/@manganate06/mailu-mcp)](https://www.npmjs.com/package/@manganate06/mailu-mcp)
 [![License: MIT](https://img.shields.io/github/license/manganate006/mailu-mcp)](LICENSE)
 
-**[Installation](#installation) · [Outils](#outils) · [Exemples](#exemples) · [🇬🇧 English](README.md)**
+**[Installation](#installation) · [Outils](#outils) · [Exemples](#exemples) · [Limites](#limites) · [🇬🇧 English](README.md)**
 
 </div>
 
@@ -97,6 +97,12 @@ Testé avec Claude Code et Claude Desktop.
 - « Crée la boîte `contact@example.com` avec un quota de 2 Go »
 - « Ajoute un alias `info@example.com` qui redirige vers `jean@gmail.com` »
 - « Régénère les clés DKIM de `example.com` »
+
+## Limites
+
+- Reflète l'API REST d'administration de Mailu — ce que l'API n'expose pas (comptes fetched, réglages webmail/antispam…) n'est pas disponible ; atteignez tout endpoint non couvert via `mailu_request`.
+- Pas d'opérations en masse — un objet par appel (l'assistant peut itérer sur une liste).
+- `MAILU_API_TOKEN` est un identifiant **admin complet** — restreignez sa portée et l'accès réseau à l'API.
 
 ## Transport
 

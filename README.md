@@ -8,7 +8,7 @@
 [![npm](https://img.shields.io/npm/v/@manganate06/mailu-mcp)](https://www.npmjs.com/package/@manganate06/mailu-mcp)
 [![License: MIT](https://img.shields.io/github/license/manganate006/mailu-mcp)](LICENSE)
 
-**[Installation](#installation) · [Tools](#tools) · [Examples](#examples) · [🇫🇷 Français](README.fr.md)**
+**[Installation](#installation) · [Tools](#tools) · [Examples](#examples) · [Limitations](#limitations) · [🇫🇷 Français](README.fr.md)**
 
 </div>
 
@@ -97,6 +97,12 @@ Tested with Claude Code and Claude Desktop.
 - "Create the mailbox `contact@example.com` with a 2 GB quota"
 - "Add an alias `info@example.com` forwarding to `jean@gmail.com`"
 - "Regenerate the DKIM keys for `example.com`"
+
+## Limitations
+
+- Mirrors the Mailu admin REST API — anything the API doesn't expose (fetched accounts, webmail/antispam settings…) isn't available; reach any un-wrapped endpoint via `mailu_request`.
+- No bulk helpers — one object per call (the assistant can loop over a list).
+- `MAILU_API_TOKEN` is a **full-admin** credential — scope it and restrict network access to the API.
 
 ## Transport
 
