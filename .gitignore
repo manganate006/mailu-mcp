@@ -6,6 +6,9 @@ dist/
 !.env.example
 .DS_Store
 
+# Documentation technique interne — ne jamais versionner
+CLAUDE.md
+
 # Editor directories and files
 .vscode/
 .idea/
