@@ -1,0 +1,30 @@
+name: Publish to npm
+
+# Publie sur npm via Trusted Publishing (OIDC) — aucun token stocke.
+# Prerequis (une fois) : configurer le Trusted Publisher sur npmjs.com
+#   package @manganate06/mailu-mcp -> Settings -> Trusted Publisher -> GitHub Actions
+#   Repository: manganate006/mailu-mcp  |  Workflow: publish.yml
+# Declenchement : creer une Release GitHub (ou lancer manuellement).
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write        # requis pour l'OIDC (Trusted Publishing)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+      - name: Update npm (OIDC trusted publishing requires npm >= 11.5.1)
+        run: npm install -g npm@latest
+      - run: npm install
+      - name: Publish (auth via OIDC, provenance automatique)
+        run: npm publish --access public
