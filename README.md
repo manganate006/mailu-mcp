@@ -2,40 +2,40 @@
 
 # mailu-mcp
 
-**Serveur MCP pour administrer un serveur mail [Mailu](https://mailu.io) depuis Claude — domaines, boîtes, alias et redirections, sans quitter la conversation.**
+**MCP server to administer a [Mailu](https://mailu.io) mail server from Claude — domains, mailboxes, aliases and forwards, without leaving the conversation.**
 
 [![CI](https://github.com/manganate006/mailu-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/manganate006/mailu-mcp/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@manganate06/mailu-mcp)](https://www.npmjs.com/package/@manganate06/mailu-mcp)
 [![License: MIT](https://img.shields.io/github/license/manganate006/mailu-mcp)](LICENSE)
 
-**[Installation](#installation) · [Outils](#outils) · [Exemples](#exemples) · [🇬🇧 English](README.en.md)**
+**[Installation](#installation) · [Tools](#tools) · [Examples](#examples) · [🇫🇷 Français](README.fr.md)**
 
 </div>
 
-## Aperçu
+## Overview
 
-Ce serveur [MCP](https://modelcontextprotocol.io) expose l'API REST d'administration de Mailu comme des outils que Claude peut appeler. Vous demandez en langage naturel, Claude exécute :
+This [MCP](https://modelcontextprotocol.io) server exposes Mailu's admin REST API as tools Claude can call. Ask in natural language, Claude executes:
 
-> **Vous :** Liste les domaines gérés par Mailu, puis les alias de `example.com`.
+> **You:** List the domains managed by Mailu, then the aliases of `example.com`.
 >
-> **Claude :** *(appelle `mailu_list_domains` puis `mailu_list_aliases_by_domain`)*
-> 3 domaines : `example.com`, `example.org`, `example.net`.
-> Alias de `example.com` : `contact@` → `team@gmail.com`, `info@` → `team@gmail.com`.
+> **Claude:** *(calls `mailu_list_domains` then `mailu_list_aliases_by_domain`)*
+> 3 domains: `example.com`, `example.org`, `example.net`.
+> Aliases of `example.com`: `contact@` → `team@gmail.com`, `info@` → `team@gmail.com`.
 
-## Prérequis
+## Requirements
 
-Activer l'API REST côté serveur Mailu (`mailu.env`, Mailu ≥ 1.9, testé sur 2.0) :
+Enable the REST API on the Mailu server (`mailu.env`, Mailu ≥ 1.9, tested on 2.0):
 
 ```ini
 API=true
 WEB_API=/api
-API_TOKEN=<généré via: openssl rand -hex 32>
+API_TOKEN=<generate with: openssl rand -hex 32>
 ```
 
-Puis recréer les conteneurs : `cd /mailu && docker compose up -d`.
-Vérifier : `curl -H "Authorization: <API_TOKEN>" https://mail.example.com/api/v1/domain`.
+Then recreate the containers: `cd /mailu && docker compose up -d`.
+Verify: `curl -H "Authorization: <API_TOKEN>" https://mail.example.com/api/v1/domain`.
 
-> Auth : le token va **brut** dans l'en-tête `Authorization` (schéma apiKey, **sans** préfixe `Bearer`).
+> Auth: the token goes **raw** in the `Authorization` header (apiKey scheme, **no** `Bearer` prefix).
 
 ## Installation
 
@@ -44,13 +44,13 @@ Vérifier : `curl -H "Authorization: <API_TOKEN>" https://mail.example.com/api/v
 ```bash
 claude mcp add mailu \
   --env MAILU_API_URL=https://mail.example.com/api/v1 \
-  --env MAILU_API_TOKEN=votre_token \
+  --env MAILU_API_TOKEN=your_token \
   -- npx -y @manganate06/mailu-mcp
 ```
 
 ### Claude Desktop / Cursor
 
-Ajouter à `claude_desktop_config.json` (ou à la config MCP de Cursor) :
+Add to `claude_desktop_config.json` (or Cursor's MCP config):
 
 ```json
 {
@@ -60,58 +60,58 @@ Ajouter à `claude_desktop_config.json` (ou à la config MCP de Cursor) :
       "args": ["-y", "@manganate06/mailu-mcp"],
       "env": {
         "MAILU_API_URL": "https://mail.example.com/api/v1",
-        "MAILU_API_TOKEN": "votre_token"
+        "MAILU_API_TOKEN": "your_token"
       }
     }
   }
 }
 ```
 
-Testé avec Claude Code et Claude Desktop.
+Tested with Claude Code and Claude Desktop.
 
 ## Configuration
 
-| Variable | Rôle | Obligatoire | Où l'obtenir |
+| Variable | Purpose | Required | Where to get it |
 |---|---|---|---|
-| `MAILU_API_URL` | URL de base de l'API (avec `/api/v1`) | ✅ | votre instance Mailu |
-| `MAILU_API_TOKEN` | Token d'API | ✅ | variable `API_TOKEN` de `mailu.env` |
-| `MAILU_MCP_DEBUG` | Logs de debug sur stderr | ❌ | `true` / `false` |
+| `MAILU_API_URL` | API base URL (with `/api/v1`) | ✅ | your Mailu instance |
+| `MAILU_API_TOKEN` | API token | ✅ | `API_TOKEN` in `mailu.env` |
+| `MAILU_MCP_DEBUG` | Debug logs on stderr | ❌ | `true` / `false` |
 
-## Outils
+## Tools
 
-32 outils, préfixe `mailu_` (omis dans la table). Détail des paramètres : [`src/index.ts`](src/index.ts).
+32 tools, `mailu_` prefix (omitted in the table). Parameter details: [`src/index.ts`](src/index.ts).
 
-| Domaine | Outils |
+| Area | Tools |
 |---|---|
-| **Domaines** | `list_domains`, `get_domain`, `create_domain`, `update_domain`, `delete_domain`, `generate_domain_dkim`, `list_domain_users`, `list_domain_managers`, `create_domain_manager`, `get_domain_manager`, `delete_domain_manager` |
-| **Boîtes** | `list_users`, `get_user`, `create_user`, `update_user`, `delete_user` |
-| **Alias** | `list_aliases`, `get_alias`, `list_aliases_by_domain`, `create_alias`, `update_alias`, `delete_alias` |
+| **Domains** | `list_domains`, `get_domain`, `create_domain`, `update_domain`, `delete_domain`, `generate_domain_dkim`, `list_domain_users`, `list_domain_managers`, `create_domain_manager`, `get_domain_manager`, `delete_domain_manager` |
+| **Mailboxes** | `list_users`, `get_user`, `create_user`, `update_user`, `delete_user` |
+| **Aliases** | `list_aliases`, `get_alias`, `list_aliases_by_domain`, `create_alias`, `update_alias`, `delete_alias` |
 | **Alternatives** | `list_alternatives`, `get_alternative`, `create_alternative`, `delete_alternative` |
 | **Relays** | `list_relays`, `get_relay`, `create_relay`, `update_relay`, `delete_relay` |
-| **Générique** | `mailu_request` (`method`, `path`, `body`) — échappatoire pour tout endpoint |
+| **Generic** | `mailu_request` (`method`, `path`, `body`) — escape hatch for any endpoint |
 
-## Exemples
+## Examples
 
-- « Liste les domaines Mailu »
-- « Montre les alias de `example.com` »
-- « Crée la boîte `contact@example.com` avec un quota de 2 Go »
-- « Ajoute un alias `info@example.com` qui redirige vers `jean@gmail.com` »
-- « Régénère les clés DKIM de `example.com` »
+- "List the Mailu domains"
+- "Show the aliases of `example.com`"
+- "Create the mailbox `contact@example.com` with a 2 GB quota"
+- "Add an alias `info@example.com` forwarding to `jean@gmail.com`"
+- "Regenerate the DKIM keys for `example.com`"
 
 ## Transport
 
-`stdio` — compatible Claude Code, Claude Desktop, Cursor et tout client MCP.
+`stdio` — works with Claude Code, Claude Desktop, Cursor and any MCP client.
 
-## Développement
+## Development
 
 ```bash
 git clone https://github.com/manganate006/mailu-mcp
 cd mailu-mcp && npm install
-npm run build && npm run bundle    # dist/bundle.js (monolithe, ex. pour NFS)
-npm test                           # self-test CRUD (requiert MAILU_API_URL/TOKEN live)
+npm run build && npm run bundle    # dist/bundle.js (single file, e.g. for NFS)
+npm test                           # CRUD self-test (needs live MAILU_API_URL/TOKEN)
 npx @modelcontextprotocol/inspector node dist/bundle.js
 ```
 
-## Licence
+## License
 
 [MIT](LICENSE)
